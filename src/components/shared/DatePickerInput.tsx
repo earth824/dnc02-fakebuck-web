@@ -4,14 +4,17 @@ import { useState } from 'react';
 import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { format } from 'date-fns';
 
 type DatePickerInputProps = {
+  id: string;
   isInValid: boolean;
   value: Date;
   onValueChange: (...event: unknown[]) => void;
 };
 
 export default function DatePickerInput({
+  id,
   isInValid,
   value,
   onValueChange
@@ -23,9 +26,9 @@ export default function DatePickerInput({
       <PopoverTrigger
         className="justify-start font-normal"
         render={
-          <Button variant="outline" aria-invalid={isInValid}>
+          <Button variant="outline" aria-invalid={isInValid} id={id}>
             {value ? (
-              <span></span>
+              <span>{format(value, 'd MMMM yyyy')}</span>
             ) : (
               <span className="text-muted-foreground">Select date</span>
             )}

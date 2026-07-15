@@ -34,7 +34,9 @@ export default function RegisterForm() {
     }
   });
 
-  const onSubmit = (data: RegisterInput) => {};
+  const onSubmit = (data: RegisterInput) => {
+    console.log(data);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,6 +89,7 @@ export default function RegisterForm() {
             <Field className="gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor={field.name}>Date of birth</FieldLabel>
               <DatePickerInput
+                id={field.name}
                 isInValid={fieldState.invalid}
                 value={field.value}
                 onValueChange={field.onChange}
