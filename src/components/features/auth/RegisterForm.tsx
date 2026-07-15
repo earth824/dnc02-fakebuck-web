@@ -17,6 +17,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { RegisterInput, registerSchema } from '@/lib/schemas/auth.schema';
+import { capitalizeFirstCha } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -59,40 +60,104 @@ export default function RegisterForm() {
             )}
           />
           {/* Last name */}
-          <Field className="gap-1">
-            <FieldLabel htmlFor="lastName">Last name</FieldLabel>
-            <Input placeholder="Last name" id="lastName" />
-          </Field>
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field, fieldState }) => (
+              <Field className="gap-1" data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>Last name</FieldLabel>
+                <Input
+                  placeholder="Last name"
+                  id={field.name}
+                  {...field}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
         </div>
         {/* Date of birth */}
-        <Field className="gap-1">
-          <FieldLabel htmlFor="dob">Date of birth</FieldLabel>
-          <DatePickerInput />
-        </Field>
+        <Controller
+          control={control}
+          name="dob"
+          render={({ field, fieldState }) => (
+            <Field className="gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Date of birth</FieldLabel>
+              <DatePickerInput
+                isInValid={fieldState.invalid}
+                value={field.value}
+                onValueChange={field.onChange}
+              />
+            </Field>
+          )}
+        />
         {/* Gender */}
-        <Field className="gap-1">
-          <FieldLabel htmlFor="gender">Gender</FieldLabel>
-          <Select>
-            <SelectTrigger id="gender">
-              <SelectValue placeholder="Select gender" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectItem value="Female">Female</SelectItem>
-              <SelectItem value="Male">Male</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
-            </SelectContent>
-          </Select>
-        </Field>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field, fieldState }) => (
+            <Field className="gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Gender</FieldLabel>
+              <Select
+                name={field.name}
+                value={capitalizeFirstCha(field.value) ?? ''}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger
+                  id={field.name}
+                  aria-invalid={fieldState.invalid}
+                >
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent alignItemWithTrigger={false}>
+                  <SelectItem value="FEMALE">Female</SelectItem>
+                  <SelectItem value="MALE">Male</SelectItem>
+                  <SelectItem value="OTHER">Other</SelectItem>
+                </SelectContent>
+              </Select>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         {/* Eamil address */}
-        <Field className="gap-1">
-          <FieldLabel htmlFor="email">Email address</FieldLabel>
-          <Input placeholder="a@mail.com" type="email" id="email" />
-        </Field>
+        <Controller
+          control={control}
+          name="email"
+          render={({ field, fieldState }) => (
+            <Field className="gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Email address</FieldLabel>
+              <Input
+                type="email"
+                placeholder="a@mail.com"
+                id={field.name}
+                {...field}
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         {/* Password */}
-        <Field className="gap-1">
-          <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input placeholder="••••••••" type="password" id="password" />
-        </Field>
+        <Controller
+          control={control}
+          name="password"
+          render={({ field, fieldState }) => (
+            <Field className="gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+              <Input
+                placeholder="••••••••"
+                type="password"
+                id={field.name}
+                {...field}
+                aria-invalid={fieldState.invalid}
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
         {/* Submit button */}
         <Field>
           <Button type="submit" className="rounded-full py-5">
