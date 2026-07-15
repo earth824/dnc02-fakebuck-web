@@ -1,6 +1,14 @@
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 import { notoSans } from '@/styles/font';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | Fakebuck',
+    default: 'Fakebuck'
+  }
+};
 
 export default function RootLayout({
   children
