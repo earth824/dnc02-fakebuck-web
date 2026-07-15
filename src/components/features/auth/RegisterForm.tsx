@@ -1,6 +1,13 @@
+'use client';
+
 import DatePickerInput from '@/components/shared/DatePickerInput';
 import { Button } from '@/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -9,17 +16,48 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { RegisterInput, registerSchema } from '@/lib/schemas/auth.schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
 
 export default function RegisterForm() {
+  const { control, handleSubmit } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      dob: undefined,
+      gender: undefined,
+      email: '',
+      password: ''
+    }
+  });
+
+  const onSubmit = (data: RegisterInput) => {};
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <FieldGroup className="gap-4">
         <div className="grid grid-cols-2 gap-4">
           {/* First name */}
-          <Field className="gap-1">
-            <FieldLabel htmlFor="firstName">First name</FieldLabel>
-            <Input placeholder="First name" id="firstName" />
-          </Field>
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field, fieldState }) => (
+              <Field className="gap-1" data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor={field.name}>First name</FieldLabel>
+                <Input
+                  placeholder="First name"
+                  id={field.name}
+                  {...field}
+                  aria-invalid={fieldState.invalid}
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
           {/* Last name */}
           <Field className="gap-1">
             <FieldLabel htmlFor="lastName">Last name</FieldLabel>
@@ -57,7 +95,9 @@ export default function RegisterForm() {
         </Field>
         {/* Submit button */}
         <Field>
-          <Button className="rounded-full py-5">Submit</Button>
+          <Button type="submit" className="rounded-full py-5">
+            Submit
+          </Button>
         </Field>
       </FieldGroup>
     </form>
