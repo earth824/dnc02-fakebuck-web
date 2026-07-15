@@ -20,7 +20,7 @@ export default function RootLayout({
       lang="en"
       className={cn('antialiased', 'font-sans', notoSans.variable)}
     >
-      <body>{children}</body>
+      <body className="bg-muted-foreground/5">{children}</body>
     </html>
   );
 }
