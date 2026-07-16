@@ -10,7 +10,7 @@ import { ErrorActionResult } from './action.type';
 import { AuthApi } from '../api/auth.api';
 import { ApiError } from '../api/api-error';
 import { redirect } from 'next/navigation';
-import { signIn } from '../auth';
+import { signIn, signOut } from '../auth';
 import { CredentialsSignin } from 'next-auth';
 
 export async function registerAction(
@@ -59,4 +59,9 @@ export async function loginAction(
     throw error;
   }
   redirect('/');
+}
+
+export async function logoutAction(): Promise<void> {
+  console.log('first');
+  await signOut({ redirectTo: '/login' });
 }
