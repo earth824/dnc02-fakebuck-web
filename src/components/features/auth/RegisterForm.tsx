@@ -16,13 +16,15 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { registerAction } from '@/lib/actions/auth.action';
 import { RegisterInput, registerSchema } from '@/lib/schemas/auth.schema';
 import { capitalizeFirstCha } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTransition } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 export default function RegisterForm() {
-  const { control, handleSubmit } = useForm<RegisterInput>({
+  const { control, handleSubmit, setError } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       firstName: '',
@@ -34,8 +36,15 @@ export default function RegisterForm() {
     }
   });
 
+  const [isPending, startTransition] = useTransition();
+
   const onSubmit = (data: RegisterInput) => {
-    console.log(data);
+    startTransition(async () => {
+      const { code, message } = await registerAction(data);
+      if (code === 'EMAIL_ALREADY_EXISTS') {
+        setError('email', { message });
+      }
+    });
   };
 
   return (
@@ -163,8 +172,12 @@ export default function RegisterForm() {
         />
         {/* Submit button */}
         <Field>
-          <Button type="submit" className="rounded-full py-5">
-            Submit
+          <Button
+            type="submit"
+            className="rounded-full py-5"
+            disabled={isPending}
+          >
+            {isPending ? 'Creating account ...' : 'Submit'}
           </Button>
         </Field>
       </FieldGroup>
