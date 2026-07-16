@@ -16,5 +16,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
       }
     })
-  ]
+  ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.access_token = user.access_token;
+        token.avatarUrl = user.avatarUrl;
+      }
+
+      return token;
+    },
+    session({ token, session }) {
+      session.user.firstName = token.firstName;
+      session.user.lastName = token.lastName;
+      session.user.avatarUrl = token.avatarUrl;
+      session.user.access_token = token.access_token;
+
+      return session;
+    }
+  }
 });

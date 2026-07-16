@@ -8,8 +8,11 @@ import {
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
 import LogoutButton from './LogoutButton';
+import { auth } from '@/lib/auth';
 
-export default function UserDropdown() {
+export default async function UserDropdown() {
+  const session = await auth();
+
   return (
     <DropdownMenu>
       {/* Toggle user menu */}
@@ -18,7 +21,10 @@ export default function UserDropdown() {
         render={
           <button>
             <Avatar className="size-10">
-              <AvatarImage src="/user.svg" alt="User" />
+              <AvatarImage
+                src={session?.user?.avatarUrl ?? '/user.svg'}
+                alt="User"
+              />
             </Avatar>
           </button>
         }
@@ -31,10 +37,15 @@ export default function UserDropdown() {
           render={
             <Link href="/profile">
               <Avatar className="size-9">
-                <AvatarImage src="/user.svg" alt="User" />
+                <AvatarImage
+                  src={session?.user?.avatarUrl ?? '/user.svg'}
+                  alt="User"
+                />
               </Avatar>
               <div>
-                <p className="text-sm font-semibold">Lionel Messi</p>
+                <p className="text-sm font-semibold">
+                  {session?.user?.firstName} {session?.user?.lastName}
+                </p>
                 <p className="text-xs text-muted-foreground">
                   See your profile
                 </p>

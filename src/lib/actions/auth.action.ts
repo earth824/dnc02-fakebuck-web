@@ -62,6 +62,5 @@ export async function loginAction(
 }
 
 export async function logoutAction(): Promise<void> {
-  console.log('first');
   await signOut({ redirectTo: '/login' });
 }
