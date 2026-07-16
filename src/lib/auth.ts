@@ -7,9 +7,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       async authorize(input) {
-        const data = loginSchema.parse(input);
-        const { access_token, user } = await AuthApi.login(data);
-        return { ...user, access_token };
+        try {
+          const data = loginSchema.parse(input);
+          const { access_token, user } = await AuthApi.login(data);
+          return { ...user, access_token };
+        } catch {
+          return null;
+        }
       }
     })
   ]
