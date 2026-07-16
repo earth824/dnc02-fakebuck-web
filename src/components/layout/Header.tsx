@@ -10,14 +10,12 @@ export default function Header() {
       <Link href="/" className="size-10 relative">
         <Image src="/logo.png" alt="Fakebuck" fill sizes="auto" />
       </Link>
+
       {/* Center: MainNavigation */}
-      <div className="text-center">
-        <MainNavigation />
-      </div>
+      <MainNavigation />
+
       {/* Right: UserDropdown */}
-      <div className="text-right">
-        <UserDropdown />
-      </div>
+      <UserDropdown />
     </header>
   );
 }
