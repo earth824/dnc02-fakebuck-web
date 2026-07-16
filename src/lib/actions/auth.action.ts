@@ -1,11 +1,17 @@
 'use server';
 
 import z from 'zod';
-import { RegisterInput, registerSchema } from '../schemas/auth.schema';
+import {
+  LoginInput,
+  RegisterInput,
+  registerSchema
+} from '../schemas/auth.schema';
 import { ErrorActionResult } from './action.type';
 import { AuthApi } from '../api/auth.api';
 import { ApiError } from '../api/api-error';
 import { redirect } from 'next/navigation';
+import { signIn } from '../auth';
+import { CredentialsSignin } from 'next-auth';
 
 export async function registerAction(
   input: RegisterInput
@@ -35,4 +41,22 @@ export async function registerAction(
   }
 
   redirect('/login');
+}
+
+export async function loginAction(
+  input: LoginInput
+): Promise<ErrorActionResult> {
+  try {
+    await signIn('credentials', { ...input, redirect: false });
+  } catch (error) {
+    if (error instanceof CredentialsSignin) {
+      return {
+        success: false,
+        message: 'Email or password is invalid.',
+        code: 'INVALID_CREDENTIALS'
+      };
+    }
+    throw error;
+  }
+  redirect('/');
 }
