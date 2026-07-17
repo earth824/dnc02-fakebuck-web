@@ -1,3 +1,4 @@
+import { UserProfileResponse } from './api.type';
 import { authFetch } from './auth-fetch';
 
 export const UserApi = {
@@ -17,5 +18,9 @@ export const UserApi = {
       method: 'PATCH',
       body: formData
     });
+  },
+
+  async getUserProfile(targetUserId: string) {
+    return authFetch<UserProfileResponse>(`/users/${targetUserId}/profile`);
   }
 };

@@ -15,3 +15,16 @@ export type LoginResponse = {
   access_token: string;
   user: UserResponse;
 };
+
+export type RelationshipStatus =
+  | 'NONE'
+  | 'FRIEND'
+  | 'SELF'
+  | 'REQUEST_SENT'
+  | 'REQUEST_RECIEVED';
+
+export type UserProfileResponse = {
+  user: UserResponse;
+  friends: UserResponse[];
+  relationshipStatus: RelationshipStatus;
+};

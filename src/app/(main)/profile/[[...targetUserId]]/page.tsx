@@ -1,4 +1,5 @@
 import ProfileHeader from '@/components/features/profile/ProfileHeader';
+import { UserApi } from '@/lib/api/user.api';
 import { auth } from '@/lib/auth';
 import { Metadata } from 'next';
 
@@ -15,5 +16,14 @@ export default async function ProfilePage(
   const targetUserId = params.targetUserId
     ? params.targetUserId[0]
     : (session?.user?.id as string);
-  return <ProfileHeader />;
+
+  const { user, friends, relationshipStatus } =
+    await UserApi.getUserProfile(targetUserId);
+  return (
+    <ProfileHeader
+      user={user}
+      friends={friends}
+      relationshipStatus={relationshipStatus}
+    />
+  );
 }

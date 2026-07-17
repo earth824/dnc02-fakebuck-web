@@ -14,13 +14,19 @@ import { uploadAvatar } from '@/lib/actions/user.action';
 import { Camera } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
 
-export default function AvatarUploadDialog() {
+type AvatarUploadDialogProps = {
+  avatarUrl?: string | null;
+};
+
+export default function AvatarUploadDialog({
+  avatarUrl
+}: AvatarUploadDialogProps) {
   const fileInputEl = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
 
   const [isPending, startTransition] = useTransition();
 
-  const imageUrl = file ? URL.createObjectURL(file) : undefined;
+  const imageUrl = file ? URL.createObjectURL(file) : avatarUrl;
 
   const handleClickSave = () => {
     startTransition(async () => {

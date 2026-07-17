@@ -14,12 +14,18 @@ import { Camera } from 'lucide-react';
 import Image from 'next/image';
 import { useRef, useState, useTransition } from 'react';
 
-export default function CoverUploadDialog() {
+type CoverUploadDialogProps = {
+  coverUrl?: string | null;
+};
+
+export default function CoverUploadDialog({
+  coverUrl
+}: CoverUploadDialogProps) {
   const fileInputEl = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const imageUrl = file ? URL.createObjectURL(file) : undefined;
+  const imageUrl = file ? URL.createObjectURL(file) : coverUrl;
 
   const handleClickSave = () => {
     startTransition(async () => {

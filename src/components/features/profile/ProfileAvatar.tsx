@@ -1,13 +1,17 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import AvatarUploadDialog from './AvatarUploadDialog';
 
-export default function ProfileAvatar() {
+type ProfileAvatarProps = {
+  avatarUrl?: string | null;
+};
+
+export default function ProfileAvatar({ avatarUrl }: ProfileAvatarProps) {
   return (
     <div className="relative">
       <Avatar className="size-42 border">
-        <AvatarImage src="/user.svg" alt="User" />
+        <AvatarImage src={avatarUrl ?? '/user.svg'} alt="User" />
       </Avatar>
-      <AvatarUploadDialog />
+      <AvatarUploadDialog avatarUrl={avatarUrl} />
     </div>
   );
 }
