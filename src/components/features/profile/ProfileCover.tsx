@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import CoverUploadDialog from './CoverUploadDialog';
 
 export default function ProfileCover() {
   return (
@@ -6,6 +7,7 @@ export default function ProfileCover() {
       {/* Cover photo */}
       <Image src="cover.svg" alt="Cover" fill className="object-cover" />
       {/* Edit cover photo button */}
+      <CoverUploadDialog />
     </div>
   );
 }
