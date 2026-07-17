@@ -4,6 +4,7 @@ import { loginSchema } from './schemas/auth.schema';
 import { AuthApi } from './api/auth.api';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  session: { maxAge: 86370 },
   providers: [
     Credentials({
       async authorize(input) {
@@ -20,6 +21,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     jwt({ token, user }) {
       if (user) {
+        token.sub = user.id;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.access_token = user.access_token;
@@ -33,6 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.lastName = token.lastName;
       session.user.avatarUrl = token.avatarUrl;
       session.user.access_token = token.access_token;
+      session.user.id = token.sub;
 
       return session;
     }

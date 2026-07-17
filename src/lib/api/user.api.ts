@@ -8,5 +8,14 @@ export const UserApi = {
       method: 'PATCH',
       body: formData
     });
+  },
+
+  async uploadAvatar(file: File) {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    return authFetch<string>('/users/me/avatar', {
+      method: 'PATCH',
+      body: formData
+    });
   }
 };
