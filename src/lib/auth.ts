@@ -3,7 +3,7 @@ import Credentials from 'next-auth/providers/credentials';
 import { loginSchema } from './schemas/auth.schema';
 import { AuthApi } from './api/auth.api';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   session: { maxAge: 86370 },
   providers: [
     Credentials({
@@ -19,7 +19,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     })
   ],
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
       if (user) {
         token.sub = user.id;
         token.firstName = user.firstName;
@@ -27,6 +27,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.access_token = user.access_token;
         token.avatarUrl = user.avatarUrl;
       }
+
+      // if (trigger === 'update') {
+      //   console.log(session);
+      //   if (session?.user?.avatarUrl) token.avatarUrl = session.user.avatarUrl;
+      // }
 
       return token;
     },
