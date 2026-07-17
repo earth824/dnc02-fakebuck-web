@@ -9,15 +9,25 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { uploadCoverAction } from '@/lib/actions/user.action';
 import { Camera } from 'lucide-react';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, useTransition } from 'react';
 
 export default function CoverUploadDialog() {
   const fileInputEl = useRef<HTMLInputElement | null>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const imageUrl = file ? URL.createObjectURL(file) : undefined;
+
+  const handleClickSave = () => {
+    startTransition(async () => {
+      if (file) {
+        await uploadCoverAction(file);
+      }
+    });
+  };
 
   return (
     <>
@@ -70,13 +80,20 @@ export default function CoverUploadDialog() {
                 variant="outline"
                 onClick={() => fileInputEl.current?.click()}
                 className="w-full"
+                disabled={isPending}
               >
                 Choose cover photo
               </Button>
             </div>
             {file && (
               <div className="flex-1">
-                <Button className="w-full">Save</Button>
+                <Button
+                  className="w-full"
+                  onClick={handleClickSave}
+                  disabled={isPending}
+                >
+                  Save
+                </Button>
               </div>
             )}
           </DialogFooter>

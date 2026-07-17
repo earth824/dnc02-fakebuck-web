@@ -1,6 +1,6 @@
 import { ApiError } from './api-error';
 
-type ApiFetchOptions = Omit<RequestInit, 'body'> & {
+export type ApiFetchOptions = Omit<RequestInit, 'body'> & {
   body?: Record<string, unknown> | FormData;
   token?: string;
 };
@@ -9,40 +9,46 @@ const API_URL = process.env.API_URL ?? 'http://localhost:8000';
 
 export async function apiFetch<T>(
   path: string,
-  options?: ApiFetchOptions
+  options: ApiFetchOptions = {}
 ): Promise<T> {
-  const headers = new Headers(options?.headers);
-  if (options?.token) {
-    headers.set('Authorization', `Bearer ${options.token}`);
+  const { body, headers, token, ...init } = options;
+
+  const newHeaders = new Headers(headers);
+  if (token) {
+    newHeaders.set('Authorization', `Bearer ${token}`);
   }
 
-  if (options?.body && !(options instanceof FormData)) {
-    headers.set('Content-Type', 'application/json');
+  if (body !== undefined && !(body instanceof FormData)) {
+    newHeaders.set('Content-Type', 'application/json');
+  }
+
+  let newBody = undefined;
+  if (!(body instanceof FormData)) {
+    newBody = JSON.stringify(body);
+  } else {
+    newBody = body;
   }
 
   const response = await fetch(`${API_URL}${path}`, {
-    ...options,
-    body: options?.body
-      ? options.body instanceof FormData
-        ? options.body
-        : JSON.stringify(options.body)
-      : undefined,
-    headers
+    ...init,
+    body: newBody,
+    headers: newHeaders
   });
 
   if (!response.ok) {
-    throw new ApiError(response.status, 'Api error');
+    const errorBody = await response.json();
+    throw new ApiError(response.status, errorBody.message);
   }
 
   const text = await response.text();
   if (!text) {
-    return null as T;
+    return undefined as T;
   }
 
   try {
-    return JSON.parse(text);
+    return JSON.parse(text) as T;
   } catch {
-    return null as T;
+    return text as T;
   }
 }
 
