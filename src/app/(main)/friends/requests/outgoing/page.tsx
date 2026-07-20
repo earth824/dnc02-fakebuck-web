@@ -32,7 +32,7 @@ export default async function OutgoingRequestPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Sent requests</h1>
-      <UserList users={users} />
+      <UserList users={users} relationShipStatus="REQUEST_SENT" />
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default async function IncomingRequestPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Friend requests</h1>
-      <UserList users={users} />
+      <UserList users={users} relationShipStatus="REQUEST_RECIEVED" />
     </div>
   );
 }

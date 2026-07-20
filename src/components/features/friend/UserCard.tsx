@@ -1,14 +1,21 @@
-import { Button } from '@/components/ui/button';
-import { UserResponse } from '@/lib/api/api.type';
+import { RelationshipStatus, UserResponse } from '@/lib/api/api.type';
 import Image from 'next/image';
+import { FRIEND_ACTION_MAP } from './FriendActionMap';
+import ActionButton from './ActionButton';
 
-type UserCardProps = UserResponse;
+type UserCardProps = UserResponse & {
+  relationShipStatus: Exclude<RelationshipStatus, 'SELF'>;
+};
 
 export default function UserCard({
+  id,
   avatarUrl,
   firstName,
-  lastName
-}: UserResponse) {
+  lastName,
+  relationShipStatus
+}: UserCardProps) {
+  const { confirm, cancel } = FRIEND_ACTION_MAP[relationShipStatus];
+
   return (
     <div className="bg-background border rounded-lg shadow w-full max-w-60 overflow-hidden">
       {/* User image */}
@@ -22,10 +29,24 @@ export default function UserCard({
         </p>
         {/* Friend action */}
         <div className="grid gap-2">
-          <Button className="rounded-lg">Unfriend</Button>
-          <Button className="rounded-lg" variant="outline">
-            Add Friend
-          </Button>
+          {confirm && (
+            <ActionButton
+              targetUserId={id}
+              variant={confirm.variant}
+              onClickAction={confirm.onClickAction}
+            >
+              {confirm.children}
+            </ActionButton>
+          )}
+          {cancel && (
+            <ActionButton
+              targetUserId={id}
+              variant={cancel.variant}
+              onClickAction={cancel.onClickAction}
+            >
+              {cancel.children}
+            </ActionButton>
+          )}
         </div>
       </div>
     </div>

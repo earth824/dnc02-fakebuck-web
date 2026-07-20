@@ -32,7 +32,7 @@ export default async function FriendPage() {
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">All friends</h1>
-      <UserList users={friends} />
+      <UserList users={friends} relationShipStatus="FRIEND" />
     </div>
   );
 }
