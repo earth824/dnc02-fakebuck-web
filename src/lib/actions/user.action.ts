@@ -27,7 +27,7 @@ export async function uploadCoverAction(
 export async function uploadAvatar(file: File): Promise<ErrorActionResult> {
   try {
     const avatarUrl = await UserApi.uploadAvatar(file);
-    // unstable_update({ user: { avatarUrl } });
+    await unstable_update({ user: { avatarUrl } });
   } catch (error) {
     if (error instanceof ApiError) {
       return {

@@ -28,10 +28,9 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
         token.avatarUrl = user.avatarUrl;
       }
 
-      // if (trigger === 'update') {
-      //   console.log(session);
-      //   if (session?.user?.avatarUrl) token.avatarUrl = session.user.avatarUrl;
-      // }
+      if (trigger === 'update') {
+        if (session?.user?.avatarUrl) token.avatarUrl = session.user.avatarUrl;
+      }
 
       return token;
     },
